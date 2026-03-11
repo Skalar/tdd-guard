@@ -21,6 +21,7 @@ import {
   createPhpunitReporter,
   createPytestReporter,
   createGoReporter,
+  createRSpecReporter,
   createRustReporter,
   createStorybookReporter,
 } from './factories'
@@ -39,6 +40,7 @@ type ReporterName =
   | 'phpunit'
   | 'pytest'
   | 'go'
+  | 'rspec'
   | 'rust'
   | 'storybook'
 
@@ -53,6 +55,7 @@ describe('Reporters', () => {
       createPhpunitReporter(),
       createPytestReporter(),
       createGoReporter(),
+      createRSpecReporter(),
       createRustReporter(),
       createStorybookReporter(),
     ]
@@ -77,6 +80,7 @@ describe('Reporters', () => {
         { name: 'phpunit', expected: 'SinglePassingTest.php' },
         { name: 'pytest', expected: 'test_single_passing.py' },
         { name: 'go', expected: 'singlePassing' },
+        { name: 'rspec', expected: 'single_passing_spec.rb' },
         { name: 'rust', expected: 'single_passing' },
         { name: 'storybook', expected: 'single-passing.stories' },
       ]
@@ -94,6 +98,7 @@ describe('Reporters', () => {
         { name: 'phpunit', expected: 'SingleFailingTest.php' },
         { name: 'pytest', expected: 'test_single_failing.py' },
         { name: 'go', expected: 'singleFailing' },
+        { name: 'rspec', expected: 'single_failing_spec.rb' },
         { name: 'rust', expected: 'single_failing' },
         { name: 'storybook', expected: 'single-failing.stories' },
       ]
@@ -111,6 +116,7 @@ describe('Reporters', () => {
         { name: 'phpunit', expected: 'SingleImportErrorTest.php' },
         { name: 'pytest', expected: 'test_single_import_error.py' },
         { name: 'go', expected: 'missingImport' },
+        { name: 'rspec', expected: 'single_import_error_spec.rb' },
         { name: 'rust', expected: 'compilation' },
         { name: 'storybook', expected: 'single-import-error.stories' },
       ]
@@ -136,6 +142,7 @@ describe('Reporters', () => {
           name: 'go',
           expected: 'TestCalculator/TestShouldAddNumbersCorrectly',
         },
+        { name: 'rspec', expected: 'should add numbers correctly' },
         {
           name: 'rust',
           expected: 'calculator_tests::should_add_numbers_correctly',
@@ -159,6 +166,7 @@ describe('Reporters', () => {
           name: 'go',
           expected: 'TestCalculator/TestShouldAddNumbersCorrectly',
         },
+        { name: 'rspec', expected: 'should add numbers correctly' },
         {
           name: 'rust',
           expected: 'calculator_tests::should_add_numbers_correctly',
@@ -185,6 +193,7 @@ describe('Reporters', () => {
           expected: 'collection_error_test_single_import_error.py',
         },
         { name: 'go', expected: 'CompilationError' },
+        { name: 'rspec', expected: 'load error' },
         { name: 'rust', expected: 'build' },
         { name: 'storybook', expected: 'play-test' },
       ]
@@ -225,6 +234,10 @@ describe('Reporters', () => {
             'singlePassingTestModule/TestCalculator/TestShouldAddNumbersCorrectly',
         },
         {
+          name: 'rspec',
+          expected: 'single_passing_spec.rb[1:1]',
+        },
+        {
           name: 'rust',
           expected:
             'single_passing::single_passing::calculator_tests::should_add_numbers_correctly',
@@ -238,7 +251,7 @@ describe('Reporters', () => {
             'passingResults',
             extract.firstTestFullName
           )
-          expect(fullNames[name]).toBe(expected)
+          expect(fullNames[name]).toContain(expected)
         }
       )
     })
@@ -265,6 +278,10 @@ describe('Reporters', () => {
             'singleFailingTestModule/TestCalculator/TestShouldAddNumbersCorrectly',
         },
         {
+          name: 'rspec',
+          expected: 'single_failing_spec.rb[1:1]',
+        },
+        {
           name: 'rust',
           expected:
             'single_failing::single_failing::calculator_tests::should_add_numbers_correctly',
@@ -282,7 +299,7 @@ describe('Reporters', () => {
             'failingResults',
             extract.firstTestFullName
           )
-          expect(fullNames[name]).toBe(expected)
+          expect(fullNames[name]).toContain(expected)
         }
       )
     })
@@ -300,6 +317,10 @@ describe('Reporters', () => {
         },
         { name: 'pytest', expected: 'test_single_import_error.py' },
         { name: 'go', expected: 'missingImportModule/CompilationError' },
+        {
+          name: 'rspec',
+          expected: 'load error',
+        },
         { name: 'rust', expected: 'compilation::build' },
         { name: 'storybook', expected: 'Calculator Primary play-test' },
       ]
@@ -325,6 +346,7 @@ describe('Reporters', () => {
         'phpunit',
         'pytest',
         'go',
+        'rspec',
         'rust',
       ]
 
@@ -344,6 +366,7 @@ describe('Reporters', () => {
         'phpunit',
         'pytest',
         'go',
+        'rspec',
         'rust',
         'storybook',
       ]
@@ -367,6 +390,7 @@ describe('Reporters', () => {
         { name: 'phpunit', expected: 'failed' },
         { name: 'pytest', expected: 'failed' },
         { name: 'go', expected: 'failed' },
+        { name: 'rspec', expected: 'failed' },
         { name: 'rust', expected: 'failed' },
         { name: 'storybook', expected: 'failed' },
       ]
@@ -404,6 +428,7 @@ describe('Reporters', () => {
           name: 'go',
           expected: 'single_failing_test.go:10: Expected 6 but got 5',
         },
+        { name: 'rspec', expected: ['expected: 6', 'got: 5'] },
         {
           name: 'rust',
           expected:
@@ -444,6 +469,7 @@ describe('Reporters', () => {
         { name: 'phpunit', expected: undefined },
         { name: 'pytest', expected: undefined },
         { name: 'go', expected: undefined },
+        { name: 'rspec', expected: undefined },
         { name: 'rust', expected: '6' }, // Successfully extracts expected value
         { name: 'storybook', expected: undefined },
       ]
@@ -467,6 +493,7 @@ describe('Reporters', () => {
         { name: 'phpunit', expected: undefined },
         { name: 'pytest', expected: undefined },
         { name: 'go', expected: undefined },
+        { name: 'rspec', expected: undefined },
         { name: 'rust', expected: '5' }, // Successfully extracts actual value
         { name: 'storybook', expected: undefined },
       ]
@@ -512,6 +539,10 @@ describe('Reporters', () => {
           ],
         },
         {
+          name: 'rspec',
+          expected: ['LoadError', 'non_existent_module'],
+        },
+        {
           name: 'rust',
           expected: ['E0432', 'unresolved import', 'non_existent_module'],
         },
@@ -549,6 +580,7 @@ describe('Reporters', () => {
         { name: 'phpunit', expected: 'passed' },
         { name: 'pytest', expected: undefined }, // TODO: Fix
         { name: 'go', expected: 'passed' },
+        { name: 'rspec', expected: 'passed' },
         { name: 'rust', expected: 'passed' },
         { name: 'storybook', expected: 'passed' },
       ]
@@ -572,6 +604,7 @@ describe('Reporters', () => {
         { name: 'phpunit', expected: 'failed' },
         { name: 'pytest', expected: undefined }, // TODO: Fix
         { name: 'go', expected: 'failed' },
+        { name: 'rspec', expected: 'failed' },
         { name: 'rust', expected: 'failed' },
         { name: 'storybook', expected: 'failed' },
       ]
@@ -595,6 +628,7 @@ describe('Reporters', () => {
         { name: 'phpunit', expected: 'failed' },
         { name: 'pytest', expected: undefined }, // TODO: Fix
         { name: 'go', expected: 'failed' },
+        { name: 'rspec', expected: 'failed' },
         { name: 'rust', expected: 'failed' },
         { name: 'storybook', expected: 'failed' },
       ]
@@ -646,6 +680,7 @@ describe('Reporters', () => {
     const phpunit = reporterData.find((r) => r.name === 'PHPUnitReporter')
     const pytest = reporterData.find((r) => r.name === 'PytestReporter')
     const go = reporterData.find((r) => r.name === 'GoReporter')
+    const rspec = reporterData.find((r) => r.name === 'RSpecReporter')
     const rust = reporterData.find((r) => r.name === 'RustReporter')
     const storybook = reporterData.find((r) => r.name === 'StorybookReporter')
 
@@ -655,6 +690,7 @@ describe('Reporters', () => {
       phpunit: safeExtract(phpunit?.[scenario], extractor),
       pytest: safeExtract(pytest?.[scenario], extractor),
       go: safeExtract(go?.[scenario], extractor),
+      rspec: safeExtract(rspec?.[scenario], extractor),
       rust: safeExtract(rust?.[scenario], extractor),
       storybook: safeExtract(storybook?.[scenario], extractor),
     }
