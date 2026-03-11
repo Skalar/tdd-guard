@@ -91,3 +91,5 @@ docs/internal/
 target/
 **/*.rs.bk
 *.pdb
+
+.direnv
