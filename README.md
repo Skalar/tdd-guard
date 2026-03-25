@@ -24,7 +24,7 @@ TDD Guard ensures Claude Code follows Test-Driven Development principles. When y
 - **Test-First Enforcement** - Blocks implementation without failing tests
 - **Minimal Implementation** - Prevents code beyond current test requirements
 - **Lint Integration** - Enforces refactoring using your linting rules
-- **Multi-Language Support** - TypeScript, JavaScript, Python, PHP, Go, Rust, and Storybook
+- **Multi-Language Support** - TypeScript, JavaScript, Python, PHP, Ruby, Go, Rust, and Storybook
 - **Customizable Rules** - Adjust validation rules to match your TDD style
 - **Flexible Validation** - Choose faster or more capable models for your needs
 - **Session Control** - Toggle on and off mid-session
@@ -33,7 +33,7 @@ TDD Guard ensures Claude Code follows Test-Driven Development principles. When y
 
 - Node.js 22+
 - Claude Code or Anthropic API key
-- Test framework (Jest, Vitest, Storybook, pytest, PHPUnit, Go 1.24+, or Rust with cargo/cargo-nextest)
+- Test framework (Jest, Vitest, Storybook, pytest, PHPUnit, RSpec, Go 1.24+, or Rust with cargo/cargo-nextest)
 
 ## Quick Start
 
@@ -233,6 +233,46 @@ test:
 </details>
 
 <details>
+<summary><b>Ruby (RSpec)</b></summary>
+
+Install the tdd-guard-rspec reporter in your project:
+
+```bash
+gem install tdd-guard-rspec
+```
+
+Or add to your `Gemfile`:
+
+```ruby
+group :test do
+  gem 'tdd-guard-rspec'
+end
+```
+
+Add the formatter to your `.rspec` file:
+
+```
+--require tdd_guard_rspec
+--format TddGuardRspec::Formatter
+```
+
+Or pass it on the command line:
+
+```bash
+bundle exec rspec --require tdd_guard_rspec --format TddGuardRspec::Formatter
+```
+
+Set the project root via environment variable:
+
+```bash
+TDD_GUARD_PROJECT_ROOT=/Users/username/projects/my-app bundle exec rspec
+```
+
+**Note:** The formatter captures test results for TDD Guard while RSpec's default output remains available. You can use both formatters together by adding `--format progress` (or `--format documentation`) alongside the TDD Guard formatter.
+
+</details>
+
+<details>
 <summary><b>Rust</b></summary>
 
 Install the [tdd-guard-rust](https://crates.io/crates/tdd-guard-rust) reporter:
@@ -362,7 +402,7 @@ TDD Guard runs with your user permissions and has access to your file system. We
 ## Roadmap
 
 - Add support for more testing frameworks (Mocha, unittest, etc.)
-- Add support for additional programming languages (Ruby, Java, C#, etc.)
+- Add support for additional programming languages (Java, C#, etc.)
 - Validate file modifications made through MCPs and shell commands
 - Add integration for OpenCode and other vendor-agnostic AI coding tools
 - Encourage meaningful refactoring opportunities when tests are green
